@@ -6,7 +6,7 @@ Status: LD
 Editor: Beatriz Esteves, Ghent University - imec http://idlab.ugent.be/, beatriz.esteves@ugent.be
 Abstract: The Policy Catalog (PolicyCAT) specification aims to define a standardised format for collections of policies, focusing in the management, description, and reusability of different types of access and usage control policies.
 Markup Shorthands: markdown yes, css no
-URL: https://knowledgeonwebscale.github.io/policyCAT/
+URL: https://spec.knows.idlab.ugent.be/PolicyCAT/latest/
 Canonical URL: _ORCHESTRATOR_CURRENT_BUILD_FULL_LINK_
 Previous Version: _ORCHESTRATOR_PREVIOUS_BUILD_FULL_LINK_
 Repository: https://github.com/KNowledgeOnWebScale/policyCAT
