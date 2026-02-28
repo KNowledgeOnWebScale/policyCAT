@@ -18,7 +18,8 @@ Repository: https://github.com/KNowledgeOnWebScale/policyCAT
 </p>
 
 <pre class=biblio> 
-{"ODRL-formal-semantics": {
+{
+  "ODRL-formal-semantics": {
     "href": "https://w3c.github.io/odrl/formal-semantics/",
     "title": "ODRL Formal Semantics",
     "authors": [
@@ -28,7 +29,19 @@ Repository: https://github.com/KNowledgeOnWebScale/policyCAT
         "Simon Steyskal",
         "Benedict Whittam Smith"
 		]
-    }
+  },
+  "DPV": {
+    "href": "https://w3id.org/dpv",
+    "title": "Data Privacy Vocabulary (DPV)",
+    "authors": [
+      "Beatriz Esteves",
+      "Delaram Golpayegani",
+      "Georg P. Krog",
+      "Harshvardhan J. Pandit",
+      "Julian Flake",
+      "Paul Ryan"
+    ]
+  }
 }
 </pre>
 
@@ -63,15 +76,20 @@ The following terms are used to describe concepts in this specification.
 
 Commonly used namespace prefixes used in this specification:
 ```turtle
-@prefix dcat:    <http://www.w3.org/ns/dcat#> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix ex:      <http://example.org/> .
-@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
-@prefix odrl:    <http://www.w3.org/ns/odrl/2/> .
-@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
-@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcat:          <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:       <http://purl.org/dc/terms/> .
+@prefix dpv:            <https://w3id.org/dpv#> .
+@prefix ex:            <http://example.org/> .
+@prefix foaf:          <http://xmlns.com/foaf/0.1/> .
+@prefix ieee-7012:     <https://w3id.org/dpv/standards/ieee/7012#> .
+@prefix odrl:          <http://www.w3.org/ns/odrl/2/> .
+@prefix owl:           <http://www.w3.org/2002/07/owl#> .
+@prefix policyCAT:     <https://w3id.org/force/policyCAT#> .
+@prefix rdf:           <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:          <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sector-health: <https://w3id.org/dpv/sector/health>
+@prefix skos:          <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:           <http://www.w3.org/2001/XMLSchema#> .
 ```
 
 Main Entities {#main-entities}
@@ -85,28 +103,33 @@ Main Entities {#main-entities}
 ex:policy-catalog-001 a dcat:Catalog ;
   dcterms:title "Policy Catalog 001"@en ;
   dcterms:description "Catalog published by policy provider X, in English, with policies related to health data sharing"@en ;
-  foaf:homepage <http://example.org/catalog/policy> ;
   dcterms:publisher ex:policy-provider-x ;
+  foaf:homepage <http://example.org/catalog/policy> ;
   dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en>  ;
   dcat:themeTaxonomy ex:health-data ;
-  dcat:resource ex:policy-001 , ex:policy-002 , ex:policy-003 .
+  policyCAT:policy ex:policy-001 , ex:policy-002 , ex:policy-003 .
 ```
 
-`dcterms:title` and `dcterms:description` should be used to specify the name and provide a description of the catalog.
-Moreover, `dcterms:publisher` should be used to identify the publisher of the catalog.
-`foaf:homepage` and `dcterms:language` can be used to associate a catalog with a Web page where it is available and to describe the language of the policies in the Catalog, respectively.
+The [policyCAT:policy](#policy-property) property is defined in this specification to associate a `dcat:Catalog` with the corresponding policies, i.e., [policyCAT:Policy](#policy-class).
 
-The `dcat:themeTaxonomy` property should be used to classify the catalog's policies according to a set of domains represented by the relative IRI `ex:health-data`. As such, it can be used to include references to specific data elements, purposes, and user groups involved in the policies of the catalog, using the SKOS vocabulary [[!SKOS-REFERENCE]] to describe them. For instance, the example below defines `ex:health-records` and `ex:healthcare-provision` as being part of the set of domains of the theme taxonomy `ex:health-data` that describes the `ex:policy-catalog-001` policy catalog.
+Moreover, the following properties should be used to describe the catalog:
+- `dcterms:title` and `dcterms:description` to specify the name and provide a description of the catalog;
+- `dcterms:publisher` to identify the publisher of the catalog;
+- `foaf:homepage` to associate a catalog with a Web page where it is available;
+- `dcterms:language` to describe the language of the policies in the catalog;
+- `dcat:themeTaxonomy` to classify the catalog's policies according to a set of domains.
+
+In this context, the `dcat:themeTaxonomy` property can be used to include references to specific data elements, purposes, and user groups involved in the policies of the catalog, e.g., using the SKOS vocabulary [[!SKOS-REFERENCE]] to describe them. For instance, the example below defines `ex:health-records` and `ex:healthcare-provision` as being part of the set of domains of the theme taxonomy `ex:health-data` that describes the `ex:policy-catalog-001` policy catalog. The DPV [[!DPV]] specification and its extensions contain terms to describe data, purposes, and other taxonomies, that can be used to describe domains related to the policies.
 
 ```turtle
 ex:health-data a skos:ConceptScheme ;
   skos:prefLabel "A set of domains to classify the health data sharing policies in the catalog"@en .
 
-ex:health-records a skos:Concept ;
+ex:health-records a skos:Concept, sector-health:EHRData ;
   skos:inScheme ex:health-data ;
   skos:prefLabel "Health record data"@en .
 
-ex:healthcare-provision a skos:Concept ;
+ex:healthcare-provision a skos:Concept, sector-health:ServiceProvision ;
   skos:inScheme ex:health-data ;
   skos:prefLabel "Healthcare service provision"@en .
 ```
@@ -115,52 +138,46 @@ Note: `odrl:hasPolicy` can be used to associate the catalog with its usage condi
 
 Note: Versioning of catalogs can be done using `dcat:version`, `dcat:previousVersion`, `dcat:hasVersion`, and `dcat:hasCurrentVersion`. Analogously, it can also be used to version resources such as policies.
 
-Issue: Mention the possibility of using DPV terms to describe domains related to the policies.
+## Policies ## {#policy-resource}
 
-## Resource ## {#resource}
-
-The catalog lists each of its resources via the `dcat:resource` property. A possible description of a policy resource using DCAT is shown below:
+The catalog lists each of its policies, i.e., `policyCAT:Policy`, a subclass of `dcat:Resource`, via the `policyCAT:policy` property, a subclass of `dcat:resource`. A possible description of a policy resource using DCAT is shown below:
 
 ```turtle
-ex:policy-001 a dcat:Resource ;
+ex:policy-001 a policyCAT:Policy ;
   dcterms:title "Policy 001"@en ;
   dcterms:description "Policy 001"@en ;
-  dcterms:creator ex:employee-001 ;
   dcterms:issued "2011-12-05"^^xsd:date ;
   dcterms:modified "2011-12-15"^^xsd:date ;
+  dcterms:creator ex:employee-001 ;
+  dcterms:publisher ex:lab ;
   dcat:contactPoint <http://example.org/employee-001/contact> ;
   dcterms:conformsTo <http://www.w3.org/ns/odrl/2/> ;
-  dcterms:publisher ex:lab ;
   dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
   dcat:theme ex:health-records, ex:healthcare-provision ;
   dcat:distribution ex:policy-001-ttl .
 ```
 
-The policy publication and revision dates are shown in `dcterms:issued` and `dcterms:modified`.
-`dcterms:accrualPeriodicity` can be used to represent the frequency of update of the policy.
-Furthermore, the temporal validity of the policy can be given using the `dcterms:temporal` property, defining a `dcterms:PeriodOfTime` as a closed interval indicated by `dcat:startDate` and `dcat:endDate`.
+The following properties should be used to describe the policy resource:
+- `dcterms:title` and `dcterms:description` to specify the name and provide a description of the policy;
+- The policy publication and revision dates are shown in `dcterms:issued` and `dcterms:modified`;
+- `dcterms:accrualPeriodicity` can be used to represent the frequency of update of the policy;
+- The temporal validity of the policy can be given using the `dcterms:temporal` property, defining a `dcterms:PeriodOfTime` as a closed interval indicated by `dcat:startDate` and `dcat:endDate`;
+- `dcterms:creator` and `dcterms:publisher` should be used to define the entity responsible for producing the resource and the entity responsible for making the resource available, respectively;
+- The `dcat:contactPoint` property can be used to provide the contact details of such entities;
+- `dcterms:conformsTo` should be used to indicate the standard or specification that the policy representation conforms to, e.g., `ex:policy-001` states that the mentioned policy conforms to the ODRL standard [[!ODRL-MODEL]];
+- `dcterms:language` should be used to describe the language of the policies;
+- `dcat:theme` is used to describe the themes or domains related to the described policy.
 
-The properties `dcterms:creator` and `dcterms:publisher` should be used to define the entity responsible for producing the resource and the entity responsible for making the resource available, respectively.
-Additionally, the `dcat:contactPoint` property can be used to provide the contact details of such entities.
+For instance, `ex:policy-001` is classified under the domains represented by the relative IRI `ex:health-records` and `ex:healthcare-provision`, which are part of the concept scheme identified by the IRI `ex:health-data` that was used to describe the catalog domain.
 
-`dcterms:conformsTo` should be used to indicate the standard or specification that the policy representation conforms to.
-In the example above, `ex:policy-001` states that the mentioned policy conforms to the ODRL standard [[!ODRL-MODEL]].
-
-`dcat:theme` is used to describe the themes or domains related to the described policy.
-For instance, `ex:policy-001` is classified under the domains represented by the relative IRI `ex:health-records` and `ex:healthcare-provision`, which are part of the concept scheme identified by the IRI `ex:health-data` that was used to describe the catalog domains.
-
-Finally, different representations of the policy `ex:policy-001` can be linked using the `dcat:distribution` property. The example above includes a distribution in the `.ttl` format.
-
-Issue: `dcat:distribution` has domain `dcat:Dataset` and range	`dcat:Distribution`, so a similar property will need to be defined in this specification to associate policies with different distributions.
-
-Issue: add a specific class and property, subclassing from `dcat:Resource` and `dcat:resource`, for policy resources, as these abstract concepts are not meant to be used.
+Finally, different representations of the policy `ex:policy-001` can be linked using the [policyCAT:policyDistribution](#distribution-property) property. The example above includes a distribution in the `.ttl` format.
 
 ## Distribution ## {#distribution}
 
-`dcat:Distribution` represents an accessible form of a dataset such as a downloadable file.
+[policyCAT:PolicyDistribution](#distribution-class) represents an accessible form of a dataset such as a downloadable file.
 
 ```turtle
-ex:policy-001-ttl a dcat:Distribution ;
+ex:policy-001-ttl a policyCAT:PolicyDistribution ;
   dcterms:title "TTL distribution of policy 001"@en ;
   dcterms:description "TTL distribution of policy 001"@en ;
   dcterms:issued "2011-12-05"^^xsd:date ;
@@ -169,25 +186,121 @@ ex:policy-001-ttl a dcat:Distribution ;
   dcat:mediaType <https://www.iana.org/assignments/media-types/text/turtle> .
 ```
 
-Besides using DCMI Metadata Terms properties, such as `dcterms:description` or `dcterms:issued`, to add descriptions or temporal aspects of the distribution, `dcat:downloadURL` should be used to provide the downloadable policy file in a given format, indicated via the `dcat:mediaType` property.
+The following properties should be used to describe the policy distribution:
+- `dcterms:title` and `dcterms:description` to specify the name and provide a description of the distribution of the policy;
+- `dcterms:issued` and `dcterms:modified` to add temporal aspects of the distribution;
+- `dcat:downloadURL` should be used to provide the downloadable policy file in a given format, indicated via the `dcat:mediaType` property.
 
 ## Agents ## {#agents}
 
-DCAT uses `foaf:Agent`, and its sub-classes `foaf:Person` (for people) and `foaf:Organization` (for government agencies or other entities) to represent entities that create and publish catalogs and their resources.
+DCAT uses `foaf:Agent`, and its sub-classes `foaf:Person` (for people) and `foaf:Organization` (for government agencies or other entities) to represent entities that create and publish catalogs and their resources. The DPV [[!DPV]] specification can also be used to describe entities.
 
 ```turtle
-ex:policy-provider-x a foaf:Organization ;
-  foaf:name "Policy Provider"@en .
+ex:policy-provider-x a foaf:Organization, dpv:Organisation ;
+  foaf:name "Policy Provider"@en ;
+  dpv:hasName "Policy Provider"@en ;
+  dpv:hasAddress "Street X, City Y"@en ;
+  dpv:hasContact "policy-provider-x@email.org"@en .
 ```
-
-Issue: Mention the possibility of using DPV terms to describe entities.
 
 Vocabulary specification {#vocabulary}
 ======================================
 
-TODO
+## Classes ## {#classes}
+
+### Policy ### {#policy-class}
+
+<pre class=simpledef>
+IRI: [https://w3id.org/force/policyCAT#Policy](https://w3id.org/force/policyCAT#Policy)
+Label: Policy
+Type: [rdfs:Class](http://www.w3.org/2000/01/rdf-schema#Class), [owl:Class](http://www.w3.org/2002/07/owl#Class)
+Definition: A resource that describes data access and usage conditions related to an asset, e.g., data or services.
+Scope: To be used to catalog policies and their related metadata.
+Subclass of: [rdfs:subClassOf](http://www.w3.org/2000/01/rdf-schema#subClassOf)
+</pre>
+
+### Policy Distribution ### {#distribution-class}
+
+<pre class=simpledef>
+IRI: [https://w3id.org/force/policyCAT#PolicyDistribution](https://w3id.org/force/policyCAT#PolicyDistribution)
+Label: Policy Distribution
+Type: [rdfs:Class](http://www.w3.org/2000/01/rdf-schema#Class), [owl:Class](http://www.w3.org/2002/07/owl#Class)
+Definition: A specific representation of a policy, e.g, in `.ttl` format.
+Scope: A policy might have several different distributions.
+</pre>
+
+## Properties ## {#classes}
+
+### policy ### {#policy-property}
+
+<pre class=simpledef>
+IRI: [https://w3id.org/force/policyCAT#policy](https://w3id.org/force/policyCAT#policy)
+Label: policy
+Type: [rdf:Property](http://www.w3.org/1999/02/22-rdf-syntax-ns#Property), [owl:ObjectProperty](http://www.w3.org/2002/07/owl#ObjectProperty)
+Definition: A policy that is listed in the catalog.
+Domain: [dcat:Catalog](http://www.w3.org/ns/dcat#Catalog)
+Range: [policyCAT:Policy](https://w3id.org/force/policyCAT#Policy)
+</pre>
+
+### policy distribution ### {#distribution-property}
+
+<pre class=simpledef>
+IRI: [https://w3id.org/force/policyCAT#policyDistribution](https://w3id.org/force/policyCAT#policyDistribution)
+Label: policy distribution
+Type: [rdf:Property](http://www.w3.org/1999/02/22-rdf-syntax-ns#Property), [owl:ObjectProperty](http://www.w3.org/2002/07/owl#ObjectProperty)
+Definition: An available distribution of the policy.
+Sub property of: [dcterms:relation](http://purl.org/dc/terms/relation)
+Domain: [policyCAT:Policy](https://w3id.org/force/policyCAT#Policy)
+Range: [policyCAT:PolicyDistribution](https://w3id.org/force/policyCAT#PolicyDistribution)
+</pre>
 
 Examples {#examples}
 ======================================
 
-TODO
+## Policy Catalog for IEEE 7012 Standard ## {#classes}
+
+```turtle
+ex:policy-catalog-ieee-7012 a dcat:Catalog ;
+  dcterms:title "Policy Catalog for IEEE 7012 Standard"@en ;
+  dcterms:description "Catalog with policies related to the IEEE 7012 Standard"@en ;
+  dcterms:publisher ex:policy-provider-ieee-7012 ;
+  foaf:homepage <https://github.com/coolharsh55/myterms> ;
+  dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en>  ;
+  dcat:themeTaxonomy ex:ieee-7012-themes ;
+  policyCAT:policy ex:SD-BASE, ex:SD-BASE-DP, ex:SD-BASE-A, ex:SD-BASE-A-DP, SD-BASE-AT,
+    ex:SD-BASE-AT-DP, ex:SD-BASE-ATP, ex:SD-BASE-ATP-DP, SD-BASE-ATP-S3P,
+    ex:SD-BASE-ATP-S3P-DP, ex:PDC-INTENT, ex:PDC-AI, ex:PDC-GOOD .
+
+ex:policy-provider-ieee-7012 a foaf:Person ;
+  dpv:hasContact "https://github.com/besteves4"@en .
+
+ex:ieee-7012-themes a skos:ConceptScheme ;
+  skos:prefLabel "A set of domains to classify the policies in the IEEE 7012 Standard"@en .
+
+ex:SD-required a skos:Concept, ieee-7012:ServiceDelivery ;
+  skos:inScheme ex:ieee-7012-themes ;
+  skos:prefLabel "Service delivery is required"@en .
+
+ex:DP-required a skos:Concept, ieee-7012:PortabilityRequired ;
+  skos:inScheme ex:ieee-7012-themes ;
+  skos:prefLabel "Data portability is required"@en .
+
+ex:SD-BASE-DP a policyCAT:Policy ;
+  dcterms:title "Policy SD-BASE-DP"@en ;
+  dcterms:description "Policy that requires Service Delivery, with an obligation for Data Portability"@en ;
+  dcterms:issued "2026-01-05"^^xsd:date ;
+  dcterms:creator ex:policy-provider-ieee-7012 ;
+  dcterms:publisher ex:policy-provider-ieee-7012 ;
+  dcat:contactPoint <https://github.com/besteves4> ;
+  dcterms:conformsTo <https://standards.ieee.org/ieee/7012/7192/> ;
+  dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
+  dcat:theme eex:DP-required, ex:SD-required ;
+  dcat:distribution ex:SD-BASE-DP-ttl .
+
+ex:SD-BASE-DP-ttl a policyCAT:PolicyDistribution ;
+  dcterms:title "TTL distribution of policy SD-BASE-DP"@en ;
+  dcterms:description "TTL distribution of policy SD-BASE-DP"@en ;
+  dcterms:issued "2026-01-05"^^xsd:date ;
+  dcat:downloadURL <https://github.com/coolharsh55/myterms/blob/master/odrl-contracts/SD-BASE-ATP-DP.ttl> ;
+  dcat:mediaType <https://www.iana.org/assignments/media-types/text/turtle> .
+```

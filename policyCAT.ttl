@@ -1,0 +1,71 @@
+@prefix bibo:          <http://purl.org/ontology/bibo/> .
+@prefix dcat:          <http://www.w3.org/ns/dcat#> .
+@prefix dcterms:       <http://purl.org/dc/terms/> .
+@prefix foaf:          <http://xmlns.com/foaf/0.1/> .
+@prefix odrl:          <http://www.w3.org/ns/odrl/2/> .
+@prefix owl:           <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:           <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:          <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:          <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann:          <http://purl.org/vocab/vann/> .
+@prefix xsd:           <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix policyCAT: <https://w3id.org/force/policyCAT#> .
+
+# ---------------- Ontology Metadata ------------------ #
+
+<https://w3id.org/force/policyCAT> a owl:Ontology ;
+    dcterms:title "Policy Catalog (PolicyCAT) specification"@en ;
+    vann:preferredNamespacePrefix "policyCAT" ;
+    vann:preferredNamespaceUri "https://w3id.org/force/policyCAT#" ;
+    rdfs:label "Policy Catalog (PolicyCAT) specification"@en ;
+    owl:versionInfo "0.1" ;
+    # owl:versionIRI <https://w3id.org/force/policyCAT/0.1> ;
+    dcterms:created "2026-01-05"^^xsd:date ;
+    # dcterms:modified "2025-xx-xx"^^xsd:date ;
+    dcterms:issued "2025-01-05"^^xsd:date ;
+    dcterms:creator <https://solidweb.me/besteves4/profile/card#me> ;
+    dcterms:publisher <https://data.knows.idlab.ugent.be/person/office/#> ;
+    dcterms:abstract ""@en ;
+    dcterms:description ""@en ;
+    rdfs:comment "This is the Turtle serialisation for the Policy Catalog (PolicyCAT) specification."@en ;
+    dcterms:bibliographicCitation "Cite this vocabulary as: Esteves, B. (2026). Policy Catalog (PolicyCAT) specification (Version 0.1). https://doi.org/xxxx"@en ;
+    bibo:doi "xxxxx"@en ;
+    # foaf:logo <https://github.com/SolidLabResearch/ODRL-Compliance-Report-Model/blob/main/img/Compliance%20Report%20Model.svg> ;
+    dcterms:source <http://www.w3.org/ns/odrl/2/>, <https://www.w3.org/TR/vocab-dcat-3/>, <https://w3id.org/dpv> ;
+    dcterms:license <https://creativecommons.org/licenses/by-sa/4.0/> .
+
+# ---------------- Classes ------------------ #
+
+policyCAT:Policy a rdfs:Class, owl:Class ;
+  rdfs:isDefinedBy policyCAT: ;
+  rdfs:label "Policy"@en ;
+  rdfs:subClassOf dcat:Resource ;
+  skos:definition "A resource that describes data access and usage conditions related to an asset, e.g., data or services."@en ;
+  skos:scopeNote "To be used to catalog policies and their related metadata."@en .
+
+policyCAT:PolicyDistribution a rdfs:Class, owl:Class ;
+  rdfs:isDefinedBy policyCAT: ;
+  rdfs:label "Policy Distribution"@en ;
+  skos:definition "A specific representation of a policy, e.g, in `.ttl` format."@en ;
+  skos:scopeNote "A policy might have several different distributions."@en .
+
+# ---------------- Properties ------------------ #
+
+policyCAT:policy a rdf:Property, owl:ObjectProperty ;
+  rdfs:isDefinedBy policyCAT: ;
+  rdfs:label "policy"@en ;
+  rdfs:comment "A policy that is listed in the catalog."@en ;
+  skos:definition "A policy that is listed in the catalog."@en ;
+  rdfs:subPropertyOf dcat:resource ;
+  rdfs:domain dcat:Catalog ;
+  rdfs:range policyCAT:Policy .
+
+policyCAT:policyDistribution a rdf:Property, a owl:ObjectProperty ;
+  rdfs:isDefinedBy policyCAT: ;
+  rdfs:label "policy distribution"@en ;
+  rdfs:comment "An available distribution of the policy."@en ;
+  skos:definition "An available distribution of the policy."@en ;
+  rdfs:subPropertyOf dcterms:relation ;
+  rdfs:domain policyCAT:Policy ;
+  rdfs:range policyCAT:PolicyDistribution .

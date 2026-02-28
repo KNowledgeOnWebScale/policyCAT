@@ -1490,7 +1490,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="_ORCHESTRATOR_CURRENT_BUILD_FULL_LINK_" rel="canonical">
-  <meta content="4d3ceedcd4b0ba9fdd249b1b53c50f209a8c31dd" name="revision">
+  <meta content="478cea9327054454ec557db63e1b83d175a1bef9" name="revision">
   <meta content="dark light" name="color-scheme">
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
@@ -2172,7 +2172,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://knows.idlab.ugent.be/"> <img alt="KNoWS" height="48" src="logo.png"> </a></p>
    <h1 class="p-name no-ref" id="title">Policy Catalog (PolicyCAT) specification</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Living Document, <time class="dt-updated" datetime="2026-01-05">5 January 2026</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Living Document, <time class="dt-updated" datetime="2026-02-28">28 February 2026</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2181,7 +2181,6 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <dd><a href="_ORCHESTRATOR_PREVIOUS_BUILD_FULL_LINK_" rel="prev">_ORCHESTRATOR_PREVIOUS_BUILD_FULL_LINK_</a>
      <dt>Issue Tracking:
      <dd><a href="https://github.com/KNowledgeOnWebScale/policyCAT/issues/">GitHub</a>
-     <dd><a href="#issues-index">Inline In Spec</a>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:beatriz.esteves@ugent.be">Beatriz Esteves</a> (<a class="p-org org" href="http://idlab.ugent.be/">Ghent University - imec</a>)
      <dt>License:
@@ -2210,12 +2209,31 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <a href="#main-entities"><span class="secno">2</span> <span class="content">Main Entities</span></a>
      <ol class="toc">
       <li><a href="#catalog"><span class="secno">2.1</span> <span class="content">Catalog</span></a>
-      <li><a href="#resource"><span class="secno">2.2</span> <span class="content">Resource</span></a>
+      <li><a href="#policy-resource"><span class="secno">2.2</span> <span class="content">Policies</span></a>
       <li><a href="#distribution"><span class="secno">2.3</span> <span class="content">Distribution</span></a>
       <li><a href="#agents"><span class="secno">2.4</span> <span class="content">Agents</span></a>
      </ol>
-    <li><a href="#vocabulary"><span class="secno">3</span> <span class="content">Vocabulary specification</span></a>
-    <li><a href="#examples"><span class="secno">4</span> <span class="content">Examples</span></a>
+    <li>
+     <a href="#vocabulary"><span class="secno">3</span> <span class="content">Vocabulary specification</span></a>
+     <ol class="toc">
+      <li>
+       <a href="#classes"><span class="secno">3.1</span> <span class="content">Classes</span></a>
+       <ol class="toc">
+        <li><a href="#policy-class"><span class="secno">3.1.1</span> <span class="content">Policy</span></a>
+        <li><a href="#distribution-class"><span class="secno">3.1.2</span> <span class="content">Policy Distribution</span></a>
+       </ol>
+      <li>
+       <a href="#classes①"><span class="secno">3.2</span> <span class="content">Properties</span></a>
+       <ol class="toc">
+        <li><a href="#policy-property"><span class="secno">3.2.1</span> <span class="content">policy</span></a>
+        <li><a href="#distribution-property"><span class="secno">3.2.2</span> <span class="content">policy distribution</span></a>
+       </ol>
+     </ol>
+    <li>
+     <a href="#examples"><span class="secno">4</span> <span class="content">Examples</span></a>
+     <ol class="toc">
+      <li><a href="#classes②"><span class="secno">4.1</span> <span class="content">Policy Catalog for IEEE 7012 Standard</span></a>
+     </ol>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
@@ -2227,7 +2245,6 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <ol class="toc">
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
      </ol>
-    <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
    </ol>
   </nav>
   <main>
@@ -2250,15 +2267,20 @@ Moreover, by implementing this specification, data publishers and consumers allo
    </dl>
    <h3 class="heading settled" data-level="1.2" id="namespaces"><span class="secno">1.2. </span><span class="content">Namespaces</span><a class="self-link" href="#namespaces"></a></h3>
    <p>Commonly used namespace prefixes used in this specification:</p>
-<pre class="language-turtle highlight"><c- k>@prefix</c-> <c- nn>dcat:</c->    <c- g>&lt;http://www.w3.org/ns/dcat#></c-> <c- p>.</c->
-<c- k>@prefix</c-> <c- nn>dcterms:</c-> <c- g>&lt;http://purl.org/dc/terms/></c-> <c- p>.</c->
-<c- k>@prefix</c-> <c- nn>ex:</c->      <c- g>&lt;http://example.org/></c-> <c- p>.</c->
-<c- k>@prefix</c-> <c- nn>foaf:</c->    <c- g>&lt;http://xmlns.com/foaf/0.1/></c-> <c- p>.</c->
-<c- k>@prefix</c-> <c- nn>odrl:</c->    <c- g>&lt;http://www.w3.org/ns/odrl/2/></c-> <c- p>.</c->
-<c- k>@prefix</c-> <c- nn>rdf:</c->     <c- g>&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#></c-> <c- p>.</c->
-<c- k>@prefix</c-> <c- nn>rdfs:</c->    <c- g>&lt;http://www.w3.org/2000/01/rdf-schema#></c-> <c- p>.</c->
-<c- k>@prefix</c-> <c- nn>skos:</c->    <c- g>&lt;http://www.w3.org/2004/02/skos/core#></c-> <c- p>.</c->
-<c- k>@prefix</c-> <c- nn>xsd:</c->     <c- g>&lt;http://www.w3.org/2001/XMLSchema#></c-> <c- p>.</c->
+<pre class="language-turtle highlight"><c- k>@prefix</c-> <c- nn>dcat:</c->          <c- g>&lt;http://www.w3.org/ns/dcat#></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>dcterms:</c->       <c- g>&lt;http://purl.org/dc/terms/></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>dpv:</c->            <c- g>&lt;https://w3id.org/dpv#></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>ex:</c->            <c- g>&lt;http://example.org/></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>foaf:</c->          <c- g>&lt;http://xmlns.com/foaf/0.1/></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>ieee-7012:</c->     <c- g>&lt;https://w3id.org/dpv/standards/ieee/7012#></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>odrl:</c->          <c- g>&lt;http://www.w3.org/ns/odrl/2/></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>owl:</c->           <c- g>&lt;http://www.w3.org/2002/07/owl#></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>policyCAT:</c->     <c- g>&lt;https://w3id.org/force/policyCAT#></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>rdf:</c->           <c- g>&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>rdfs:</c->          <c- g>&lt;http://www.w3.org/2000/01/rdf-schema#></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>sector-health:</c-> <c- g>&lt;https://w3id.org/dpv/sector/health></c->
+<c- k>@prefix</c-> <c- nn>skos:</c->          <c- g>&lt;http://www.w3.org/2004/02/skos/core#></c-> <c- p>.</c->
+<c- k>@prefix</c-> <c- nn>xsd:</c->           <c- g>&lt;http://www.w3.org/2001/XMLSchema#></c-> <c- p>.</c->
 </pre>
    <h2 class="heading settled" data-level="2" id="main-entities"><span class="secno">2. </span><span class="content">Main Entities</span><a class="self-link" href="#main-entities"></a></h2>
    <h3 class="heading settled" data-level="2.1" id="catalog"><span class="secno">2.1. </span><span class="content">Catalog</span><a class="self-link" href="#catalog"></a></h3>
@@ -2266,58 +2288,81 @@ Moreover, by implementing this specification, data publishers and consumers allo
 <pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>policy-catalog-001</c-> <c- b>a</c-> <c- nn>dcat</c-><c- p>:</c-><c- f>Catalog</c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>title</c-> <c- s>"Policy Catalog 001"</c-><c- o>@</c->en <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>description</c-> <c- s>"Catalog published by policy provider X, in English, with policies related to health data sharing"</c-><c- o>@</c->en <c- p>;</c->
-  <c- nn>foaf</c-><c- p>:</c-><c- f>homepage</c-> <c- g>&lt;http://example.org/catalog/policy></c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>publisher</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-provider-x</c-> <c- p>;</c->
+  <c- nn>foaf</c-><c- p>:</c-><c- f>homepage</c-> <c- g>&lt;http://example.org/catalog/policy></c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>language</c-> <c- g>&lt;http://id.loc.gov/vocabulary/iso639-1/en></c->  <c- p>;</c->
   <c- nn>dcat</c-><c- p>:</c-><c- f>themeTaxonomy</c-> <c- nn>ex</c-><c- p>:</c-><c- f>health-data</c-> <c- p>;</c->
-  <c- nn>dcat</c-><c- p>:</c-><c- f>resource</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-001</c-> <c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-002</c-> <c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-003</c-> <c- p>.</c->
+  <c- nn>policyCAT</c-><c- p>:</c-><c- f>policy</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-001</c-> <c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-002</c-> <c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-003</c-> <c- p>.</c->
 </pre>
-   <p><code>dcterms:title</code> and <code>dcterms:description</code> should be used to specify the name and provide a description of the catalog.
-Moreover, <code>dcterms:publisher</code> should be used to identify the publisher of the catalog. <code>foaf:homepage</code> and <code>dcterms:language</code> can be used to associate a catalog with a Web page where it is available and to describe the language of the policies in the Catalog, respectively.</p>
-   <p>The <code>dcat:themeTaxonomy</code> property should be used to classify the catalog’s policies according to a set of domains represented by the relative IRI <code>ex:health-data</code>. As such, it can be used to include references to specific data elements, purposes, and user groups involved in the policies of the catalog, using the SKOS vocabulary <a data-link-type="biblio" href="#biblio-skos-reference" title="SKOS Simple Knowledge Organization System Reference">[SKOS-REFERENCE]</a> to describe them. For instance, the example below defines <code>ex:health-records</code> and <code>ex:healthcare-provision</code> as being part of the set of domains of the theme taxonomy <code>ex:health-data</code> that describes the <code>ex:policy-catalog-001</code> policy catalog.</p>
+   <p>The <a href="#policy-property">policyCAT:policy</a> property is defined in this specification to associate a <code>dcat:Catalog</code> with the corresponding policies, i.e., <a href="#policy-class">policyCAT:Policy</a>.</p>
+   <p>Moreover, the following properties should be used to describe the catalog:</p>
+   <ul>
+    <li data-md>
+     <p><code>dcterms:title</code> and <code>dcterms:description</code> to specify the name and provide a description of the catalog;</p>
+    <li data-md>
+     <p><code>dcterms:publisher</code> to identify the publisher of the catalog;</p>
+    <li data-md>
+     <p><code>foaf:homepage</code> to associate a catalog with a Web page where it is available;</p>
+    <li data-md>
+     <p><code>dcterms:language</code> to describe the language of the policies in the catalog;</p>
+    <li data-md>
+     <p><code>dcat:themeTaxonomy</code> to classify the catalog’s policies according to a set of domains.</p>
+   </ul>
+   <p>In this context, the <code>dcat:themeTaxonomy</code> property can be used to include references to specific data elements, purposes, and user groups involved in the policies of the catalog, e.g., using the SKOS vocabulary <a data-link-type="biblio" href="#biblio-skos-reference" title="SKOS Simple Knowledge Organization System Reference">[SKOS-REFERENCE]</a> to describe them. For instance, the example below defines <code>ex:health-records</code> and <code>ex:healthcare-provision</code> as being part of the set of domains of the theme taxonomy <code>ex:health-data</code> that describes the <code>ex:policy-catalog-001</code> policy catalog. The DPV <a data-link-type="biblio" href="#biblio-dpv" title="Data Privacy Vocabulary (DPV)">[DPV]</a> specification and its extensions contain terms to describe data, purposes, and other taxonomies, that can be used to describe domains related to the policies.</p>
 <pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>health-data</c-> <c- b>a</c-> <c- nn>skos</c-><c- p>:</c-><c- f>ConceptScheme</c-> <c- p>;</c->
   <c- nn>skos</c-><c- p>:</c-><c- f>prefLabel</c-> <c- s>"A set of domains to classify the health data sharing policies in the catalog"</c-><c- o>@</c->en <c- p>.</c->
 
-<c- nn>ex</c-><c- p>:</c-><c- f>health-records</c-> <c- b>a</c-> <c- nn>skos</c-><c- p>:</c-><c- f>Concept</c-> <c- p>;</c->
+<c- nn>ex</c-><c- p>:</c-><c- f>health-records</c-> <c- b>a</c-> <c- nn>skos</c-><c- p>:</c-><c- f>Concept</c-><c- p>,</c-> <c- nn>sector-health</c-><c- p>:</c-><c- f>EHRData</c-> <c- p>;</c->
   <c- nn>skos</c-><c- p>:</c-><c- f>inScheme</c-> <c- nn>ex</c-><c- p>:</c-><c- f>health-data</c-> <c- p>;</c->
   <c- nn>skos</c-><c- p>:</c-><c- f>prefLabel</c-> <c- s>"Health record data"</c-><c- o>@</c->en <c- p>.</c->
 
-<c- nn>ex</c-><c- p>:</c-><c- f>healthcare-provision</c-> <c- b>a</c-> <c- nn>skos</c-><c- p>:</c-><c- f>Concept</c-> <c- p>;</c->
+<c- nn>ex</c-><c- p>:</c-><c- f>healthcare-provision</c-> <c- b>a</c-> <c- nn>skos</c-><c- p>:</c-><c- f>Concept</c-><c- p>,</c-> <c- nn>sector-health</c-><c- p>:</c-><c- f>ServiceProvision</c-> <c- p>;</c->
   <c- nn>skos</c-><c- p>:</c-><c- f>inScheme</c-> <c- nn>ex</c-><c- p>:</c-><c- f>health-data</c-> <c- p>;</c->
   <c- nn>skos</c-><c- p>:</c-><c- f>prefLabel</c-> <c- s>"Healthcare service provision"</c-><c- o>@</c->en <c- p>.</c->
 </pre>
    <p class="note" role="note"><span class="marker">Note:</span> <code>odrl:hasPolicy</code> can be used to associate the catalog with its usage conditions using an ODRL conformant policy <a data-link-type="biblio" href="#biblio-odrl-model" title="ODRL Information Model 2.2">[ODRL-MODEL]</a>. Similarly, it can also be used for resources with the same goal.</p>
    <p class="note" role="note"><span class="marker">Note:</span> Versioning of catalogs can be done using <code>dcat:version</code>, <code>dcat:previousVersion</code>, <code>dcat:hasVersion</code>, and <code>dcat:hasCurrentVersion</code>. Analogously, it can also be used to version resources such as policies.</p>
-   <p class="issue" id="issue-daec37e2"><a class="self-link" href="#issue-daec37e2"></a> Mention the possibility of using DPV terms to describe domains related to the policies.</p>
-   <h3 class="heading settled" data-level="2.2" id="resource"><span class="secno">2.2. </span><span class="content">Resource</span><a class="self-link" href="#resource"></a></h3>
-   <p>The catalog lists each of its resources via the <code>dcat:resource</code> property. A possible description of a policy resource using DCAT is shown below:</p>
-<pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>policy-001</c-> <c- b>a</c-> <c- nn>dcat</c-><c- p>:</c-><c- f>Resource</c-> <c- p>;</c->
+   <h3 class="heading settled" data-level="2.2" id="policy-resource"><span class="secno">2.2. </span><span class="content">Policies</span><a class="self-link" href="#policy-resource"></a></h3>
+   <p>The catalog lists each of its policies, i.e., <code>policyCAT:Policy</code>, a subclass of <code>dcat:Resource</code>, via the <code>policyCAT:policy</code> property, a subclass of <code>dcat:resource</code>. A possible description of a policy resource using DCAT is shown below:</p>
+<pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>policy-001</c-> <c- b>a</c-> <c- nn>policyCAT</c-><c- p>:</c-><c- f>Policy</c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>title</c-> <c- s>"Policy 001"</c-><c- o>@</c->en <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>description</c-> <c- s>"Policy 001"</c-><c- o>@</c->en <c- p>;</c->
-  <c- nn>dcterms</c-><c- p>:</c-><c- f>creator</c-> <c- nn>ex</c-><c- p>:</c-><c- f>employee-001</c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>issued</c-> <c- s>"2011-12-05"</c-><c- p>^^</c-><c- nn>xsd</c-><c- p>:</c-><c- f>date</c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>modified</c-> <c- s>"2011-12-15"</c-><c- p>^^</c-><c- nn>xsd</c-><c- p>:</c-><c- f>date</c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>creator</c-> <c- nn>ex</c-><c- p>:</c-><c- f>employee-001</c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>publisher</c-> <c- nn>ex</c-><c- p>:</c-><c- f>lab</c-> <c- p>;</c->
   <c- nn>dcat</c-><c- p>:</c-><c- f>contactPoint</c-> <c- g>&lt;http://example.org/employee-001/contact></c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>conformsTo</c-> <c- g>&lt;http://www.w3.org/ns/odrl/2/></c-> <c- p>;</c->
-  <c- nn>dcterms</c-><c- p>:</c-><c- f>publisher</c-> <c- nn>ex</c-><c- p>:</c-><c- f>lab</c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>language</c-> <c- g>&lt;http://id.loc.gov/vocabulary/iso639-1/en></c-> <c- p>;</c->
   <c- nn>dcat</c-><c- p>:</c-><c- f>theme</c-> <c- nn>ex</c-><c- p>:</c-><c- f>health-records</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>healthcare-provision</c-> <c- p>;</c->
   <c- nn>dcat</c-><c- p>:</c-><c- f>distribution</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-001-ttl</c-> <c- p>.</c->
 </pre>
-   <p>The policy publication and revision dates are shown in <code>dcterms:issued</code> and <code>dcterms:modified</code>. <code>dcterms:accrualPeriodicity</code> can be used to represent the frequency of update of the policy.
-Furthermore, the temporal validity of the policy can be given using the <code>dcterms:temporal</code> property, defining a <code>dcterms:PeriodOfTime</code> as a closed interval indicated by <code>dcat:startDate</code> and <code>dcat:endDate</code>.</p>
-   <p>The properties <code>dcterms:creator</code> and <code>dcterms:publisher</code> should be used to define the entity responsible for producing the resource and the entity responsible for making the resource available, respectively.
-Additionally, the <code>dcat:contactPoint</code> property can be used to provide the contact details of such entities.</p>
-   <p><code>dcterms:conformsTo</code> should be used to indicate the standard or specification that the policy representation conforms to.
-In the example above, <code>ex:policy-001</code> states that the mentioned policy conforms to the ODRL standard <a data-link-type="biblio" href="#biblio-odrl-model" title="ODRL Information Model 2.2">[ODRL-MODEL]</a>.</p>
-   <p><code>dcat:theme</code> is used to describe the themes or domains related to the described policy.
-For instance, <code>ex:policy-001</code> is classified under the domains represented by the relative IRI <code>ex:health-records</code> and <code>ex:healthcare-provision</code>, which are part of the concept scheme identified by the IRI <code>ex:health-data</code> that was used to describe the catalog domains.</p>
-   <p>Finally, different representations of the policy <code>ex:policy-001</code> can be linked using the <code>dcat:distribution</code> property. The example above includes a distribution in the <code>.ttl</code> format.</p>
-   <p class="issue" id="issue-5362e709"><a class="self-link" href="#issue-5362e709"></a> <code>dcat:distribution</code> has domain <code>dcat:Dataset</code> and range <code>dcat:Distribution</code>, so a similar property will need to be defined in this specification to associate policies with different distributions.</p>
-   <p class="issue" id="issue-58cd6373"><a class="self-link" href="#issue-58cd6373"></a> add a specific class and property, subclassing from <code>dcat:Resource</code> and <code>dcat:resource</code>, for policy resources, as these abstract concepts are not meant to be used.</p>
+   <p>The following properties should be used to describe the policy resource:</p>
+   <ul>
+    <li data-md>
+     <p><code>dcterms:title</code> and <code>dcterms:description</code> to specify the name and provide a description of the policy;</p>
+    <li data-md>
+     <p>The policy publication and revision dates are shown in <code>dcterms:issued</code> and <code>dcterms:modified</code>;</p>
+    <li data-md>
+     <p><code>dcterms:accrualPeriodicity</code> can be used to represent the frequency of update of the policy;</p>
+    <li data-md>
+     <p>The temporal validity of the policy can be given using the <code>dcterms:temporal</code> property, defining a <code>dcterms:PeriodOfTime</code> as a closed interval indicated by <code>dcat:startDate</code> and <code>dcat:endDate</code>;</p>
+    <li data-md>
+     <p><code>dcterms:creator</code> and <code>dcterms:publisher</code> should be used to define the entity responsible for producing the resource and the entity responsible for making the resource available, respectively;</p>
+    <li data-md>
+     <p>The <code>dcat:contactPoint</code> property can be used to provide the contact details of such entities;</p>
+    <li data-md>
+     <p><code>dcterms:conformsTo</code> should be used to indicate the standard or specification that the policy representation conforms to, e.g., <code>ex:policy-001</code> states that the mentioned policy conforms to the ODRL standard <a data-link-type="biblio" href="#biblio-odrl-model" title="ODRL Information Model 2.2">[ODRL-MODEL]</a>;</p>
+    <li data-md>
+     <p><code>dcterms:language</code> should be used to describe the language of the policies;</p>
+    <li data-md>
+     <p><code>dcat:theme</code> is used to describe the themes or domains related to the described policy.</p>
+   </ul>
+   <p>For instance, <code>ex:policy-001</code> is classified under the domains represented by the relative IRI <code>ex:health-records</code> and <code>ex:healthcare-provision</code>, which are part of the concept scheme identified by the IRI <code>ex:health-data</code> that was used to describe the catalog domain.</p>
+   <p>Finally, different representations of the policy <code>ex:policy-001</code> can be linked using the <a href="#distribution-property">policyCAT:policyDistribution</a> property. The example above includes a distribution in the <code>.ttl</code> format.</p>
    <h3 class="heading settled" data-level="2.3" id="distribution"><span class="secno">2.3. </span><span class="content">Distribution</span><a class="self-link" href="#distribution"></a></h3>
-   <p><code>dcat:Distribution</code> represents an accessible form of a dataset such as a downloadable file.</p>
-<pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>policy-001-ttl</c-> <c- b>a</c-> <c- nn>dcat</c-><c- p>:</c-><c- f>Distribution</c-> <c- p>;</c->
+   <p><a href="#distribution-class">policyCAT:PolicyDistribution</a> represents an accessible form of a dataset such as a downloadable file.</p>
+<pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>policy-001-ttl</c-> <c- b>a</c-> <c- nn>policyCAT</c-><c- p>:</c-><c- f>PolicyDistribution</c-> <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>title</c-> <c- s>"TTL distribution of policy 001"</c-><c- o>@</c->en <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>description</c-> <c- s>"TTL distribution of policy 001"</c-><c- o>@</c->en <c- p>;</c->
   <c- nn>dcterms</c-><c- p>:</c-><c- f>issued</c-> <c- s>"2011-12-05"</c-><c- p>^^</c-><c- nn>xsd</c-><c- p>:</c-><c- f>date</c-> <c- p>;</c->
@@ -2325,17 +2370,160 @@ For instance, <code>ex:policy-001</code> is classified under the domains represe
   <c- nn>dcat</c-><c- p>:</c-><c- f>downloadURL</c-> <c- g>&lt;http://example.org/policy/001.ttl></c-> <c- p>;</c->
   <c- nn>dcat</c-><c- p>:</c-><c- f>mediaType</c-> <c- g>&lt;https://www.iana.org/assignments/media-types/text/turtle></c-> <c- p>.</c->
 </pre>
-   <p>Besides using DCMI Metadata Terms properties, such as <code>dcterms:description</code> or <code>dcterms:issued</code>, to add descriptions or temporal aspects of the distribution, <code>dcat:downloadURL</code> should be used to provide the downloadable policy file in a given format, indicated via the <code>dcat:mediaType</code> property.</p>
+   <p>The following properties should be used to describe the policy distribution:</p>
+   <ul>
+    <li data-md>
+     <p><code>dcterms:title</code> and <code>dcterms:description</code> to specify the name and provide a description of the distribution of the policy;</p>
+    <li data-md>
+     <p><code>dcterms:issued</code> and <code>dcterms:modified</code> to add temporal aspects of the distribution;</p>
+    <li data-md>
+     <p><code>dcat:downloadURL</code> should be used to provide the downloadable policy file in a given format, indicated via the <code>dcat:mediaType</code> property.</p>
+   </ul>
    <h3 class="heading settled" data-level="2.4" id="agents"><span class="secno">2.4. </span><span class="content">Agents</span><a class="self-link" href="#agents"></a></h3>
-   <p>DCAT uses <code>foaf:Agent</code>, and its sub-classes <code>foaf:Person</code> (for people) and <code>foaf:Organization</code> (for government agencies or other entities) to represent entities that create and publish catalogs and their resources.</p>
-<pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>policy-provider-x</c-> <c- b>a</c-> <c- nn>foaf</c-><c- p>:</c-><c- f>Organization</c-> <c- p>;</c->
-  <c- nn>foaf</c-><c- p>:</c-><c- f>name</c-> <c- s>"Policy Provider"</c-><c- o>@</c->en <c- p>.</c->
+   <p>DCAT uses <code>foaf:Agent</code>, and its sub-classes <code>foaf:Person</code> (for people) and <code>foaf:Organization</code> (for government agencies or other entities) to represent entities that create and publish catalogs and their resources. The DPV <a data-link-type="biblio" href="#biblio-dpv" title="Data Privacy Vocabulary (DPV)">[DPV]</a> specification can also be used to describe entities.</p>
+<pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>policy-provider-x</c-> <c- b>a</c-> <c- nn>foaf</c-><c- p>:</c-><c- f>Organization</c-><c- p>,</c-> <c- nn>dpv</c-><c- p>:</c-><c- f>Organisation</c-> <c- p>;</c->
+  <c- nn>foaf</c-><c- p>:</c-><c- f>name</c-> <c- s>"Policy Provider"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dpv</c-><c- p>:</c-><c- f>hasName</c-> <c- s>"Policy Provider"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dpv</c-><c- p>:</c-><c- f>hasAddress</c-> <c- s>"Street X, City Y"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dpv</c-><c- p>:</c-><c- f>hasContact</c-> <c- s>"policy-provider-x@email.org"</c-><c- o>@</c->en <c- p>.</c->
 </pre>
-   <p class="issue" id="issue-6e55cfc0"><a class="self-link" href="#issue-6e55cfc0"></a> Mention the possibility of using DPV terms to describe entities.</p>
    <h2 class="heading settled" data-level="3" id="vocabulary"><span class="secno">3. </span><span class="content">Vocabulary specification</span><a class="self-link" href="#vocabulary"></a></h2>
-   <p>TODO</p>
+   <h3 class="heading settled" data-level="3.1" id="classes"><span class="secno">3.1. </span><span class="content">Classes</span><a class="self-link" href="#classes"></a></h3>
+   <h4 class="heading settled" data-level="3.1.1" id="policy-class"><span class="secno">3.1.1. </span><span class="content">Policy</span><a class="self-link" href="#policy-class"></a></h4>
+   <table class="def">
+    <tbody>
+     <tr>
+      <th>IRI
+      <td><a href="https://w3id.org/force/policyCAT#Policy">https://w3id.org/force/policyCAT#Policy</a>
+     <tr>
+      <th>Label
+      <td>Policy
+     <tr>
+      <th>Type
+      <td><a href="http://www.w3.org/2000/01/rdf-schema#Class">rdfs:Class</a>, <a href="http://www.w3.org/2002/07/owl#Class">owl:Class</a>
+     <tr>
+      <th>Definition
+      <td>A resource that describes data access and usage conditions related to an asset, e.g., data or services.
+     <tr>
+      <th>Scope
+      <td>To be used to catalog policies and their related metadata.
+     <tr>
+      <th>Subclass of
+      <td><a href="http://www.w3.org/2000/01/rdf-schema#subClassOf">rdfs:subClassOf</a>
+   </table>
+   <h4 class="heading settled" data-level="3.1.2" id="distribution-class"><span class="secno">3.1.2. </span><span class="content">Policy Distribution</span><a class="self-link" href="#distribution-class"></a></h4>
+   <table class="def">
+    <tbody>
+     <tr>
+      <th>IRI
+      <td><a href="https://w3id.org/force/policyCAT#PolicyDistribution">https://w3id.org/force/policyCAT#PolicyDistribution</a>
+     <tr>
+      <th>Label
+      <td>Policy Distribution
+     <tr>
+      <th>Type
+      <td><a href="http://www.w3.org/2000/01/rdf-schema#Class">rdfs:Class</a>, <a href="http://www.w3.org/2002/07/owl#Class">owl:Class</a>
+     <tr>
+      <th>Definition
+      <td>A specific representation of a policy, e.g, in <code>.ttl</code> format.
+     <tr>
+      <th>Scope
+      <td>A policy might have several different distributions.
+   </table>
+   <h3 class="heading settled" data-level="3.2" id="classes①"><span class="secno">3.2. </span><span class="content">Properties</span><a class="self-link" href="#classes①"></a></h3>
+   <h4 class="heading settled" data-level="3.2.1" id="policy-property"><span class="secno">3.2.1. </span><span class="content">policy</span><a class="self-link" href="#policy-property"></a></h4>
+   <table class="def">
+    <tbody>
+     <tr>
+      <th>IRI
+      <td><a href="https://w3id.org/force/policyCAT#policy">https://w3id.org/force/policyCAT#policy</a>
+     <tr>
+      <th>Label
+      <td>policy
+     <tr>
+      <th>Type
+      <td><a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">rdf:Property</a>, <a href="http://www.w3.org/2002/07/owl#ObjectProperty">owl:ObjectProperty</a>
+     <tr>
+      <th>Definition
+      <td>A policy that is listed in the catalog.
+     <tr>
+      <th>Domain
+      <td><a href="http://www.w3.org/ns/dcat#Catalog">dcat:Catalog</a>
+     <tr>
+      <th>Range
+      <td><a href="https://w3id.org/force/policyCAT#Policy">policyCAT:Policy</a>
+   </table>
+   <h4 class="heading settled" data-level="3.2.2" id="distribution-property"><span class="secno">3.2.2. </span><span class="content">policy distribution</span><a class="self-link" href="#distribution-property"></a></h4>
+   <table class="def">
+    <tbody>
+     <tr>
+      <th>IRI
+      <td><a href="https://w3id.org/force/policyCAT#policyDistribution">https://w3id.org/force/policyCAT#policyDistribution</a>
+     <tr>
+      <th>Label
+      <td>policy distribution
+     <tr>
+      <th>Type
+      <td><a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">rdf:Property</a>, <a href="http://www.w3.org/2002/07/owl#ObjectProperty">owl:ObjectProperty</a>
+     <tr>
+      <th>Definition
+      <td>An available distribution of the policy.
+     <tr>
+      <th>Sub property of
+      <td><a href="http://purl.org/dc/terms/relation">dcterms:relation</a>
+     <tr>
+      <th>Domain
+      <td><a href="https://w3id.org/force/policyCAT#Policy">policyCAT:Policy</a>
+     <tr>
+      <th>Range
+      <td><a href="https://w3id.org/force/policyCAT#PolicyDistribution">policyCAT:PolicyDistribution</a>
+   </table>
    <h2 class="heading settled" data-level="4" id="examples"><span class="secno">4. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h2>
-   <p>TODO</p>
+   <h3 class="heading settled" data-level="4.1" id="classes②"><span class="secno">4.1. </span><span class="content">Policy Catalog for IEEE 7012 Standard</span><a class="self-link" href="#classes②"></a></h3>
+<pre class="language-turtle highlight"><c- nn>ex</c-><c- p>:</c-><c- f>policy-catalog-ieee-7012</c-> <c- b>a</c-> <c- nn>dcat</c-><c- p>:</c-><c- f>Catalog</c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>title</c-> <c- s>"Policy Catalog for IEEE 7012 Standard"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>description</c-> <c- s>"Catalog with policies related to the IEEE 7012 Standard"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>publisher</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-provider-ieee-7012</c-> <c- p>;</c->
+  <c- nn>foaf</c-><c- p>:</c-><c- f>homepage</c-> <c- g>&lt;https://github.com/coolharsh55/myterms></c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>language</c-> <c- g>&lt;http://id.loc.gov/vocabulary/iso639-1/en></c->  <c- p>;</c->
+  <c- nn>dcat</c-><c- p>:</c-><c- f>themeTaxonomy</c-> <c- nn>ex</c-><c- p>:</c-><c- f>ieee-7012-themes</c-> <c- p>;</c->
+  <c- nn>policyCAT</c-><c- p>:</c-><c- f>policy</c-> <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-DP</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-A</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-A-DP</c-><c- p>,</c-> SD-BASE-AT<c- p>,</c->
+    <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-AT-DP</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-ATP</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-ATP-DP</c-><c- p>,</c-> SD-BASE-ATP-S<c- mi>3</c->P<c- p>,</c->
+    <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-ATP-S3P-DP</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>PDC-INTENT</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>PDC-AI</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>PDC-GOOD</c-> <c- p>.</c->
+
+<c- nn>ex</c-><c- p>:</c-><c- f>policy-provider-ieee-7012</c-> <c- b>a</c-> <c- nn>foaf</c-><c- p>:</c-><c- f>Person</c-> <c- p>;</c->
+  <c- nn>dpv</c-><c- p>:</c-><c- f>hasContact</c-> <c- s>"https://github.com/besteves4"</c-><c- o>@</c->en <c- p>.</c->
+
+<c- nn>ex</c-><c- p>:</c-><c- f>ieee-7012-themes</c-> <c- b>a</c-> <c- nn>skos</c-><c- p>:</c-><c- f>ConceptScheme</c-> <c- p>;</c->
+  <c- nn>skos</c-><c- p>:</c-><c- f>prefLabel</c-> <c- s>"A set of domains to classify the policies in the IEEE 7012 Standard"</c-><c- o>@</c->en <c- p>.</c->
+
+<c- nn>ex</c-><c- p>:</c-><c- f>SD-required</c-> <c- b>a</c-> <c- nn>skos</c-><c- p>:</c-><c- f>Concept</c-><c- p>,</c-> <c- nn>ieee-7012</c-><c- p>:</c-><c- f>ServiceDelivery</c-> <c- p>;</c->
+  <c- nn>skos</c-><c- p>:</c-><c- f>inScheme</c-> <c- nn>ex</c-><c- p>:</c-><c- f>ieee-7012-themes</c-> <c- p>;</c->
+  <c- nn>skos</c-><c- p>:</c-><c- f>prefLabel</c-> <c- s>"Service delivery is required"</c-><c- o>@</c->en <c- p>.</c->
+
+<c- nn>ex</c-><c- p>:</c-><c- f>DP-required</c-> <c- b>a</c-> <c- nn>skos</c-><c- p>:</c-><c- f>Concept</c-><c- p>,</c-> <c- nn>ieee-7012</c-><c- p>:</c-><c- f>PortabilityRequired</c-> <c- p>;</c->
+  <c- nn>skos</c-><c- p>:</c-><c- f>inScheme</c-> <c- nn>ex</c-><c- p>:</c-><c- f>ieee-7012-themes</c-> <c- p>;</c->
+  <c- nn>skos</c-><c- p>:</c-><c- f>prefLabel</c-> <c- s>"Data portability is required"</c-><c- o>@</c->en <c- p>.</c->
+
+<c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-DP</c-> <c- b>a</c-> <c- nn>policyCAT</c-><c- p>:</c-><c- f>Policy</c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>title</c-> <c- s>"Policy SD-BASE-DP"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>description</c-> <c- s>"Policy that requires Service Delivery, with an obligation for Data Portability"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>issued</c-> <c- s>"2026-01-05"</c-><c- p>^^</c-><c- nn>xsd</c-><c- p>:</c-><c- f>date</c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>creator</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-provider-ieee-7012</c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>publisher</c-> <c- nn>ex</c-><c- p>:</c-><c- f>policy-provider-ieee-7012</c-> <c- p>;</c->
+  <c- nn>dcat</c-><c- p>:</c-><c- f>contactPoint</c-> <c- g>&lt;https://github.com/besteves4></c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>conformsTo</c-> <c- g>&lt;https://standards.ieee.org/ieee/7012/7192/></c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>language</c-> <c- g>&lt;http://id.loc.gov/vocabulary/iso639-1/en></c-> <c- p>;</c->
+  <c- nn>dcat</c-><c- p>:</c-><c- f>theme</c-> <c- nn>eex</c-><c- p>:</c-><c- f>DP-required</c-><c- p>,</c-> <c- nn>ex</c-><c- p>:</c-><c- f>SD-required</c-> <c- p>;</c->
+  <c- nn>dcat</c-><c- p>:</c-><c- f>distribution</c-> <c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-DP-ttl</c-> <c- p>.</c->
+
+<c- nn>ex</c-><c- p>:</c-><c- f>SD-BASE-DP-ttl</c-> <c- b>a</c-> <c- nn>policyCAT</c-><c- p>:</c-><c- f>PolicyDistribution</c-> <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>title</c-> <c- s>"TTL distribution of policy SD-BASE-DP"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>description</c-> <c- s>"TTL distribution of policy SD-BASE-DP"</c-><c- o>@</c->en <c- p>;</c->
+  <c- nn>dcterms</c-><c- p>:</c-><c- f>issued</c-> <c- s>"2026-01-05"</c-><c- p>^^</c-><c- nn>xsd</c-><c- p>:</c-><c- f>date</c-> <c- p>;</c->
+  <c- nn>dcat</c-><c- p>:</c-><c- f>downloadURL</c-> <c- g>&lt;https://github.com/coolharsh55/myterms/blob/master/odrl-contracts/SD-BASE-ATP-DP.ttl></c-> <c- p>;</c->
+  <c- nn>dcat</c-><c- p>:</c-><c- f>mediaType</c-> <c- g>&lt;https://www.iana.org/assignments/media-types/text/turtle></c-> <c- p>.</c->
+</pre>
   </main>
   <div data-fill-with="conformance">
    <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
@@ -2494,6 +2682,8 @@ For instance, <code>ex:policy-001</code> is classified under the domains represe
   <dl>
    <dt id="biblio-dcterms">[DCTERMS]
    <dd>DCMI Usage Board. <a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/"><cite>DCMI Metadata Terms</cite></a>. 20 January 2020. DCMI Recommendation. URL: <a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/">https://www.dublincore.org/specifications/dublin-core/dcmi-terms/</a>
+   <dt id="biblio-dpv">[DPV]
+   <dd>Beatriz Esteves; et al. <a href="https://w3id.org/dpv"><cite>Data Privacy Vocabulary (DPV)</cite></a>. URL: <a href="https://w3id.org/dpv">https://w3id.org/dpv</a>
    <dt id="biblio-odrl-model">[ODRL-MODEL]
    <dd>Renato Iannella; Serena Villata. <a href="https://w3c.github.io/poe/model/"><cite>ODRL Information Model 2.2</cite></a>. URL: <a href="https://w3c.github.io/poe/model/">https://w3c.github.io/poe/model/</a>
    <dt id="biblio-rfc2119">[RFC2119]
@@ -2503,13 +2693,6 @@ For instance, <code>ex:policy-001</code> is classified under the domains represe
    <dt id="biblio-vocab-dcat-3">[VOCAB-DCAT-3]
    <dd>Simon Cox; et al. <a href="https://w3c.github.io/dxwg/dcat/"><cite>Data Catalog Vocabulary (DCAT) - Version 3</cite></a>. URL: <a href="https://w3c.github.io/dxwg/dcat/">https://w3c.github.io/dxwg/dcat/</a>
   </dl>
-  <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
-  <div style="counter-reset:issue">
-   <div class="issue"> Mention the possibility of using DPV terms to describe domains related to the policies. <a class="issue-return" href="#issue-daec37e2" title="Jump to section">↵</a></div>
-   <div class="issue"> <code>dcat:distribution</code> has domain <code>dcat:Dataset</code> and range <code>dcat:Distribution</code>, so a similar property will need to be defined in this specification to associate policies with different distributions. <a class="issue-return" href="#issue-5362e709" title="Jump to section">↵</a></div>
-   <div class="issue"> add a specific class and property, subclassing from <code>dcat:Resource</code> and <code>dcat:resource</code>, for policy resources, as these abstract concepts are not meant to be used. <a class="issue-return" href="#issue-58cd6373" title="Jump to section">↵</a></div>
-   <div class="issue"> Mention the possibility of using DPV terms to describe entities. <a class="issue-return" href="#issue-6e55cfc0" title="Jump to section">↵</a></div>
-  </div>
 <script>/* Boilerplate: script-dom-helper */
 "use strict";
 function query(sel) { return document.querySelector(sel); }
